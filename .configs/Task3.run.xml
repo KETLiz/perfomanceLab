@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Task3" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="org.example.task3.Task3" />
+    <module name="perfomanceLab" />
+    <option name="PROGRAM_PARAMETERS" value="src/main/java/org/example/task3/values.json src/main/java/org/example/task3/tests.json src/main/java/org/example/task3/report.json" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
