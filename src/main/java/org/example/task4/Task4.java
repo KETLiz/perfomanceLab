@@ -9,7 +9,8 @@ import java.util.Scanner;
 
 public class Task4 {
 
-    public int[] readFromFile(String fileName) {
+    public int[] readFromFile(String[] args) {
+        String fileName = args[0];
         List<Integer> nums = new ArrayList<>();
 
         String fullFileName = "src/main/java/org/example/task4/" + fileName;
@@ -65,14 +66,10 @@ public class Task4 {
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
         Task4 task4 = new Task4();
+        int[] arrFromFile = task4.readFromFile(args);
+        int countSteps = task4.minCountSteps(arrFromFile);
+        System.out.println("Минимальное количество шагов равно " + countSteps);
 
-        System.out.print("Введите имя файла: ");
-        String fileName = sc.nextLine();
-        int[] arr = task4.readFromFile(fileName);
-        int resultSteps = task4.minCountSteps(arr);
-        System.out.println("Минимальное количество шагов для приведения элементов" +
-                " к одному числу равно: " + resultSteps);
     }
 }

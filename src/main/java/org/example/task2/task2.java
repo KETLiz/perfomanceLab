@@ -26,7 +26,13 @@ public class task2 {
         return result;
     }
 
-    public List<Integer> calculation(File circle, File point) {
+    //public List<Integer> calculation(File circle, File point) {
+    public List<Integer> calculation(String[] filesPath) {
+        if(filesPath.length != 2) {
+            throw new ArrayIndexOutOfBoundsException("Надо ввести 2 пути к файлам!");
+        }
+        File circle = new File(filesPath[0]);
+        File point = new File(filesPath[1]);
         int i = 0;
         int j = i+1;
         int pointX = 0;
@@ -60,8 +66,9 @@ public class task2 {
 
     public static void main(String[] args) {
         task2 t = new task2();
-        List<Integer> res = t.calculation(new File("src/main/java/org/example/task2/1.txt"),
-                new File("src/main/java/org/example/task2/2.txt"));
+        List<Integer> res = t.calculation(args);
+//        List<Integer> res = t.calculation(new File("src/main/java/org/example/task2/1.txt"),
+//                new File("src/main/java/org/example/task2/2.txt"));
         for(Integer i : res) {
             System.out.println(i);
         }

@@ -17,15 +17,23 @@ import java.util.*;
 
 public class Task3 {
 
-    File fileValue = new File("src/main/java/org/example/task3/values.json");
-    File fileTests = new File("src/main/java/org/example/task3/tests.json");
-    File fileReport = new File("src/main/java/org/example/task3/report.json");
+//    File fileValue = new File("src/main/java/org/example/task3/values.json");
+//    File fileTests = new File("src/main/java/org/example/task3/tests.json");
+//    File fileReport = new File("src/main/java/org/example/task3/report.json");
 
-    public List<String> readValuesFromJson() throws IOException, ParseException {
+    public String[] getFilesPath(String[] args) {
+        if(args.length != 3) {
+            throw new ArrayIndexOutOfBoundsException("Количество путей к файлам должно быть именно 3!");
+        }
+        return args;
+    }
+
+    public List<String> readValuesFromJson(String fileValue) throws IOException, ParseException {
+        File file = new File(fileValue);
         List<String> values = new ArrayList<>();
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = mapper.readTree(fileValue);
+        JsonNode jsonNode = mapper.readTree(file);
         JsonNode v = jsonNode.get("values");
         List<Map<String, Object>> list = mapper.convertValue(v, new TypeReference<List<Map<String, Object>>>() {
         });
@@ -36,16 +44,17 @@ public class Task3 {
         return values;
     }
 
-    public List<Map<String, Object>> readTestsJson() throws IOException {
+    public List<Map<String, Object>> readTestsJson(String fileTests) throws IOException {
+        File file = new File(fileTests);
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(fileTests);
+        JsonNode jsonNode = objectMapper.readTree(file);
         JsonNode t = jsonNode.get("tests");
         List<Map<String, Object>> list = objectMapper.convertValue(t, new TypeReference<List<Map<String, Object>>>() {
         });
         return list;
     }
 
-    public void writeToFile(List<Map<String, Object>> tests, List<String> values) throws IOException {
+    public void writeToFile(String fileReport, List<Map<String, Object>> tests, List<String> values) throws IOException {
         int i = 0; // счётчик по списку tests
         int j = 0; // счётчик по списку values
         while(i < tests.size() && j < values.size()) {
@@ -55,20 +64,26 @@ public class Task3 {
             if(test.containsKey("values")) {
                 List<Map<String, Object>> nestedList = (List<Map<String, Object>>) test.get("values");
                 List<String> nestedValues = values.subList(0, j+1);
-                writeToFile(nestedList, nestedValues);
-                System.out.println(nestedList.getClass());
+                writeToFile(fileReport, nestedList, nestedValues);
             }
             i++;
         }
 
         ObjectMapper o = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        o.writeValue(fileReport, tests);
+        o.writeValue(new File(fileReport), tests);
     }
 
     public static void main(String[] args) throws IOException, ParseException {
         Task3 task3 = new Task3();
-        List<String> values = task3.readValuesFromJson();
-        List<Map<String, Object>> tests = task3.readTestsJson();
-        task3.writeToFile(tests, values);
+        String[] filesPath = task3.getFilesPath(args);
+
+        String fileValue = filesPath[0]; // путь к файлу values.json
+        List<String> values = task3.readValuesFromJson(fileValue);
+
+        String fileTests = filesPath[1]; // путь к файлу tests.json
+        List<Map<String, Object>> tests = task3.readTestsJson(fileTests);
+
+        String fileReport = filesPath[2]; // путь к файлу report.java
+        task3.writeToFile(fileReport, tests, values);
     }
 }
